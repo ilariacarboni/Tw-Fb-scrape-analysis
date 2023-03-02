@@ -5,38 +5,52 @@ import configparser
 import requests
 import pandas as pd
 import json
+from database import MongoDb
 
 config = configparser.RawConfigParser()
 config.read('config.ini')
-bearer_token = config['twitter']['bearer_token']
-tweet_fields=['context_annotations', "referenced_tweets","lang","author_id","created_at","entities"]
-#newfile
+api_key = config['twitter']['api_key']
+api_key_secret = config['twitter']['api_key_secret']
+access_token = config['twitter']['access_token']
+access_token_secret = config['twitter']['access_token_secret']
+
+tweet_fields=['context_annotations', "author_id","created_at","entities",'public_metrics']
+
+db = MongoDb("mongodb://localhost:27017/", "tweets_db", "tweets_collection", "users_collection")
+
 class MyStream(tweepy.StreamingClient) :
     tweets = []
     counter=0
+    # authentication
+    auth = tweepy.OAuthHandler(api_key, api_key_secret)
+    auth.set_access_token(access_token, access_token_secret) 
+    api = tweepy.API(auth)
 
     def on_connect (self) :
         print("Connected")
 
     def on_tweet (self, tweet):
         if tweet.referenced_tweets == None:
-            #print(f"{tweet.author_id} {tweet.created_at} : {tweet.text}")
             user_id = tweet.author_id
-            #date = tweet.created_at.strftime("%Y-%m-%d %H:%M:%S")
-            content = tweet.text
+            user = self.api.get_user(user_id=user_id)
+            db.insert_tweet(tweet)
+            db.insert_user(user)
 
-            data = {'UserId': [user_id], 'Text': [content]}
-            df = pd.DataFrame(data)
-            with open('tweets-stream.csv','a', encoding="utf-8") as f: df.to_csv(f, header=False)
+            data = { 'Username': [user.screen_name],'Followers': user.followers_count, 'following': user.friends_count,
+                    'account created': [user.created_at.isoformat()],'Text': [tweet.text]
+                    }
+
+            #df = pd.DataFrame(data)
+            #with open('tweets-stream.csv','a', encoding="utf-8") as f: df.to_csv(f, header=False)
             self.tweets.append(data)
             self.counter += 1
             time.sleep(0.2)
-            if self.counter >= 10: # desired number of tweets
+            if self.counter >= 10: #limit number of tweets
                 self.disconnect()
 
     def get_filtered_stream(self):
         #add rule
-        rule = StreamRule(value="click has:links lang:en")
+        rule = StreamRule(value="(check OR see OR here OR click) has:links -is:retweet lang:en")
         self.add_rules(rule)
         self.filter(expansions="author_id",tweet_fields=tweet_fields)
         
