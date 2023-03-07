@@ -28,18 +28,3 @@ def retrieve_from_s3():
             json_obj = json.loads(json_str)
             filtered_objects.append(json_obj)
     return filtered_objects
-
-#query sull'oggetto
-def query_data( key_name, query_expression):
-    response = s3.select_object_content(
-        Bucket=bucket_name,
-        Key=key_name,
-        ExpressionType='SQL',
-        Expression=query_expression,
-        InputSerialization={'JSON': {'Type': 'Document'}},
-        OutputSerialization={'CSV': {}}
-    )
-    for event in response['Payload']:
-        if 'Records' in event:
-            records = event['Records']['Payload'].decode('utf-8')
-            print(records)
