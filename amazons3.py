@@ -1,5 +1,3 @@
-import boto3
-import csv
 import json
 from s3_client import s3
 from datetime import datetime
