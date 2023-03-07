@@ -54,7 +54,7 @@ while len(content_set) < 5:
     
     for post in all_posts :
         try:
-            name=post.find("a",{"class" : "x1i10hfl xjbqb8w x6umtig x1b1mbwd xaqea5y xav7gou x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz xt0b8zv xzsf02u x1s688f"})#classe nome
+            name=post.find("a",{"class" : "x1i10hfl xjbqb8w x6umtig x1b1mbwd xaqea5y xav7gou x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz xt0b8zv xzsf02u x1s688f"})#classe account
             name=name.text
         except:
             name="not found"
@@ -90,14 +90,13 @@ while len(content_set) < 5:
     sleep(5)
 
 content_list = list(content_set)
-#file json definito
+#file json saved in storage
 for i in range(len(content_list)):
     data = {"name": name_list[i], "content": content_list[i], "image": image_list[i]}
     object_name = f"object/{uuid.uuid4()}.json"
     save_to_s3(data, object_name)
-
-#query = "SELECT name, content, image FROM S3Object s WHERE s.content LIKE '%affitto%'"
-query_res = str(retrieve_from_s3()) #add param per selezione
+#get data from storage
+query_res = str(retrieve_from_s3()) 
 print(query_res)
 
 get_dalle_response("image_1.jpg")
