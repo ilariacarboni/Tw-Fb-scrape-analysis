@@ -32,7 +32,7 @@ Note: The code provided for facebook scraping assumes that you have Chrome insta
 However you can change the driver to use a different browser by importing the corresponding driver and using it to launch the browser.
 
 ## Install
- Before running the application, to install the required libraries:
+ Before running the application, install the required libraries:
  
 ```bash
  pip install -r requirements.txt
