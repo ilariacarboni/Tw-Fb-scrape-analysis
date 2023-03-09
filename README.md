@@ -1,33 +1,41 @@
 # TWandFB-scrape-analysis
 
 ## Introduction
-Extracting features from URLs to build a data set for machine learning. The purpose is to find a machine learning model to predict phishing URLs, which are targeted to the Brazilian population.
+This repository represents a tool for scraping data from twitter and facebook using Twitter API and JavaScript APIs on fb.
 
-This repo includes the implementation of our paper:
+The data is stored in a Mongodb database or in a AmazonS3 bucket of your own. 
+
+The same data is then retrieved from the storage service and analyzed by ChatGPT or Dall-E.
+
+You can either choose which part of the application to use, Twitter or Facebook, by running one of the two main files: 
+```tw_main.py``` or ```fb_group_scrape.py```
+
+The results of the data analysis are then showed as graphs and images on a Streamlit application.
 
 
 ## Requirements
+Before running the application, add your own API keys and credentials in the ```config.ini``` file.
 
-###
+### How to generate keys
+
+- [Twitter](https://developer.twitter.com/en/docs/twitter-api/getting-started/getting-access-to-the-twitter-api): Create a developer account, generate the keys.
+- [Facebook](https://www.facebook.com/login/): Use your credentials email and password.
+- [OpenAI](https://platform.openai.com/signup): Create a developer account, generate the key.
+- [AamzonsS3](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html): Create an account, generate the keys and create a bucket.
 
 Note: The code provided for facebook scraping assumes that you have Chrome installed on your system.
 However you can change the driver to use a different browser by importing the corresponding driver and using it to launch the browser.
 
 ## Install
-
+ Before running the application
+ 
 ```bash
-$ sudo apt-get update && sudo apt-get upgrade
-$ sudo apt-get install virtualenv python3 python3-dev python-dev gcc libpq-dev libssl-dev libffi-dev build-essentials
-$ virtualenv -p /usr/bin/python3 .env
-$ source .env/bin/activate
-$ pip install -r requirements.txt
+ pip install -r requirements.txt
 ```
 
 ## How to run
 
-Before running the software, add the API Keys to the Google Safe Browsing, Phishtank, and MyWot in the ```config.ini``` file.
 
-Now, run:
 
 ```bash
 $ python run.py <input-urls> <output-dataset>
