@@ -60,7 +60,6 @@ while len(content_set) < 5:
             name=name.text
         except:
             name="not found"
-        print(name)
         try:
             content=post.find("div",{"class" : "x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r x126k92a"}) #classe content
             content=content.text
