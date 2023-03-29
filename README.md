@@ -1,7 +1,7 @@
 # TWandFB-scrape-analysis
 
 ## Introduction
-This repository represents a tool for scraping data from twitter and facebook using Twitter API and JavaScript APIs on fb.
+This repository represents a tool for scraping data from twitter and facebook using Twitter API and JavaScript content on fb.
 
 The data is stored in a Mongodb database or in a AmazonS3 bucket of your own. 
 
